@@ -6,8 +6,8 @@ SRCS    = $(SRC)/main.c
 SRCS    += $(shell find $(SRC) -type f -name '*.c')
 OBJS    = $(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SRCS))
 EXE     = game-of-life 
-CFLAGS  = -I$(INCLUDE) -std=c11 -pedantic
-LDLIBS  = -lm
+CFLAGS  = -I$(INCLUDE) -std=c11 -Wall -Wextra -Werror -pedantic
+LDLIBS  = -lm -lraylib
 
 .PHONY: clean
 
