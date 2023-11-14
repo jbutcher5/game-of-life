@@ -13,8 +13,7 @@ static inline Vector2 CellScreenPosition(int n) {
 }
 
 static inline int BufferIndex(float x, float y) {
-  printf("y: %f\n", ((y * BUFF_WIDTH) / (10 * SCALE)));
-  return (int)(x + (y * 960))/(10 * SCALE);  
+  return x/(10 * SCALE) + (int)(y/(10 * SCALE))*1000;  
 }
 
 void RenderBuffer(bool *buffer) {
@@ -26,13 +25,15 @@ void RenderBuffer(bool *buffer) {
 }
 
 void PaintCell(bool *buffer) {
+  static int last_index = -1;
+  
   Vector2 pos = GetMousePosition();
   int index = BufferIndex(pos.x, pos.y);
 
-  printf("%f %f (%d)\n", pos.x, pos.y, index);
-  
-  if (IsMouseButtonDown(1))
+  if (IsMouseButtonDown(0) && index != last_index) {
+    last_index = index; 
     buffer[index] = !buffer[index];
+  }
 }
 
 int main(void) {
