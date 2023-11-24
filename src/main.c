@@ -1,8 +1,6 @@
 #include "raylib.h"
 #include "stdbool.h"
 
-#include "stdio.h"
-
 #define SCALE 1
 #define BUFF_WIDTH 1000
 #define BUFF_HEIGHT 1000
