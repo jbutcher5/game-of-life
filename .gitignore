@@ -36,6 +36,7 @@
 *.x86_64
 *.hex
 game-of-life
+blackbox
 build/
 
 # Debug files

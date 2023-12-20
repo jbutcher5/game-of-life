@@ -4,7 +4,8 @@ OBJ     = build
 SRC     = src
 SRCS    += $(shell find $(SRC) -type f -name '*.c')
 OBJS    = $(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SRCS))
-EXE     = game-of-life 
+EXE     = game-of-life
+TESTEXE = blackbox
 CFLAGS  = -I$(INCLUDE) -std=c99 -Wall -Wextra -Werror -pedantic
 LDLIBS  = -lm -lraylib
 
@@ -16,6 +17,7 @@ $(OBJ)/%.o: $(SRC)/%.c
 	$(CC) -c -g $(CFLAGS) $< -o $@
 
 $(OBJ)/%.o: %.c
+	@mkdir -p "$(@D)"
 	@echo "Compiling: $< -> $@"
 	$(CC) -c -g $(CFLAGS) $< -o $@
 
@@ -26,12 +28,11 @@ $(EXE): $(OBJS) $(OBJ)/main.o
 $(OBJ):
 	mkdir -p $@
 
-blackbox: $(OBJS) $(OBJ)/test.o
-	$(CC) $^ -g $(LDLIBS) -lrt -o blackbox
+$(TESTEXE): $(OBJS) $(OBJ)/test.o
+	$(CC) $^ -g $(LDLIBS) -lrt -o $(TESTEXE) 
 
 format: $(SRC)
 	clang-format $^ -i
 
 clean:
-	@echo "$(SRCS) | $(OBJS)"
-	rm -rf $(OBJ) $(EXE)
+	rm -rf $(OBJ) $(EXE) $(TESTEXE)
