@@ -1,10 +1,10 @@
 #include "field.h"
 
-inline Vector2 CellScreenPosition(int n) {
+Vector2 CellScreenPosition(int n) {
   return (Vector2){.x = (n % 1000)*10*SCALE, .y = (int)(n / 1000)*10*SCALE};
 }
 
-inline int BufferIndex(float x, float y) {
+int BufferIndex(float x, float y) {
   return x/(10 * SCALE) + (int)(y/(10 * SCALE))*1000;  
 }
 

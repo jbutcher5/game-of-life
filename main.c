@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#include "field.h"
+#include "src/field.h"
 
 int main(void) {
   const int screenWidth = 960;
