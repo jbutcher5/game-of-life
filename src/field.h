@@ -1,6 +1,9 @@
 #pragma once
 #include <raylib.h>
 
+#define SCREEN_WIDTH 960
+#define SCREEN_HEIGHT 540
+
 #define SCALE 1
 #define BUFF_WIDTH 1000
 #define BUFF_HEIGHT 1000
