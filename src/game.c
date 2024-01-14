@@ -31,13 +31,13 @@ static int AdjCells(bool *buffer, int index) {
 
   int result = GetCell(buffer, index - BUFF_WIDTH - 1);
 
-  int neighbors[7] = {index - BUFF_WIDTH, index - BUFF_WIDTH + 1,
+  int neighbours[7] = {index - BUFF_WIDTH, index - BUFF_WIDTH + 1,
 		    index - 1, index + 1, index + BUFF_WIDTH - 1, index + BUFF_WIDTH,
 		    index + BUFF_WIDTH + 1};
 
   for (int i = 0; i < 7; i++) {
     result <<= 1;
-    result |= GetCell(buffer, neighbors[i]);
+    result |= GetCell(buffer, neighbours[i]);
   }
 
   return result;
