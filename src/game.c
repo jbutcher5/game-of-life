@@ -17,11 +17,8 @@ bool *RequestBuffer(void) {
   return (bool *)buffer2;
 }
 
-static bool GetCell(bool *buffer, int index) {
-  if (index < 0 || index > BUFF_SIZE)
-    return 0;
-
-  return buffer[index];
+static inline bool GetCell(bool *buffer, int index) {
+  return index >= 0 && index <= BUFF_SIZE && buffer[index];
 }
 
 static int AdjCells(bool *buffer, int index) {
