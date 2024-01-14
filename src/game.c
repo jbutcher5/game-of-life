@@ -3,24 +3,17 @@
 #include <stdbool.h>
 #include <nmmintrin.h>
 
-void CleanBuffer(bool *buffer) {
-  for (int i = 0; i < BUFF_SIZE; i++)
-    buffer[i] = 0;
-}
-
 bool *RequestBuffer(void) {
   static bool buffer1[BUFF_SIZE];
   static bool buffer2[BUFF_SIZE]; 
   static bool i = 0;
 
   if (!i) {
-    //CleanBuffer(buffer1);
     i++;
     return (bool *)buffer1;
   }
 
   i--;
-  //CleanBuffer(buffer2);
   return (bool *)buffer2;
 }
 
@@ -36,25 +29,16 @@ static int AdjCells(bool *buffer, int index) {
   // Next 2 bits are left and right adj cells respectfully
   // Last 3 bits are bottom 3 adj cells from left to right
 
-  int result = 0;
+  int result = GetCell(buffer, index - BUFF_WIDTH - 1);
 
-  result |= GetCell(buffer, index - BUFF_WIDTH - 1);
-  result <<= 1;
-  result |= GetCell(buffer, index - BUFF_WIDTH);
-  result <<= 1;
-  result |= GetCell(buffer, index - BUFF_WIDTH + 1);
-  result <<= 1;
+  int neighbors[7] = {index - BUFF_WIDTH, index - BUFF_WIDTH + 1,
+		    index - 1, index + 1, index + BUFF_WIDTH - 1, index + BUFF_WIDTH,
+		    index + BUFF_WIDTH + 1};
 
-  result |= GetCell(buffer, index - 1);
-  result <<= 1;
-  result |= GetCell(buffer, index + 1);
-  result <<= 1;
-  
-  result |= GetCell(buffer, index + BUFF_WIDTH - 1);
-  result <<= 1;
-  result |= GetCell(buffer, index + BUFF_WIDTH);
-  result <<= 1;
-  result |= GetCell(buffer, index + BUFF_WIDTH + 1);
+  for (int i = 0; i < 7; i++) {
+    result <<= 1;
+    result |= GetCell(buffer, neighbors[i]);
+  }
 
   return result;
 }
