@@ -7,7 +7,7 @@ OBJS    = $(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SRCS))
 EXE     = game-of-life
 TESTEXE = blackbox
 CFLAGS  = -I$(INCLUDE) -std=c99 -Wall -Wextra -Werror -pedantic -mpopcnt
-LDLIBS  = -lm -lraylib
+LDLIBS  = -lm -lraylib -lomp
 
 .PHONY: clean
 
