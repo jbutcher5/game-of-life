@@ -102,23 +102,12 @@ bool UpdateCell(int adjcells, bool current_state) {
 bool *UpdateCells(bool *buffer) {
   bool *nextbuf = RequestBuffer();
 
-  omp_set_dynamic(0);
-  omp_set_num_threads(5);
-  
+  int i;
   // Iterate through each cell and generate a new state
-#pragma omp parallel
-  {
- 
-#pragma omp for
-  for (int i = 0; i < BUFF_SIZE; i++) {
+#pragma omp parallel for schedule(static)
+  for (i = 0; i < BUFF_SIZE; i++)
     nextbuf[i] = UpdateCell(AdjCells(buffer, i), buffer[i]);
-    
-    printf("%d\n", omp_get_thread_num());
-  }
-
   
-  }
-    
   return nextbuf;
 }
 
