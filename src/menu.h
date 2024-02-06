@@ -36,5 +36,5 @@ typedef struct {
 } Menu;
 
 void DrawMenuBox(Vector2 position, Vector2 size);
-void RenderMenu(Menu *menu);
+void RenderMenu(Menu menu);
 void UpdateMenu(Menu *menu);
