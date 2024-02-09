@@ -1,18 +1,26 @@
 #include "src/field.h"
 #include "src/game.h"
+#include "src/menu.h"
 #include <raylib.h>
 #include <omp.h>
 
 #define MAX_THREADS 4
 
 int main(void) {
-
   omp_set_num_teams(MAX_THREADS);
-  
+
   // Init window
   
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Conway's Game of Life");
   SetTargetFPS(60);
+
+
+  // Main Menu
+
+  char
+  Component menu_components[] = {{10, 10}, {100, 40}, "Test", Label};
+  Menu main_menu = {}
+
   
   bool *buffer = RequestBuffer();
   GameState state = Editing;
