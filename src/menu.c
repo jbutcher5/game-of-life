@@ -2,7 +2,7 @@
 #include <raylib.h>
 #include <raymath.h>
 
-inline void DrawMenuBox(Vector2 position, Vector2 size) {
+void DrawMenuBox(Vector2 position, Vector2 size) {
   DrawRectangle(position.x, position.y, size.x, size.y, BLACK);
   DrawRectangleLines(position.x, position.y, size.x, size.y, RAYWHITE);
 }

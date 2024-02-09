@@ -17,11 +17,9 @@ int main(void) {
 
   // Main Menu
 
-  char
-  Component menu_components[] = {{10, 10}, {100, 40}, "Test", Label};
-  Menu main_menu = {}
+  Component menu_components[] = {{(Vector2){10, 10}, (Vector2){100, 40}, (void*)"Test", Label}};
+  Menu main_menu = {menu_components, 1, (Vector2){0, 0}, (Vector2){100, 40}};
 
-  
   bool *buffer = RequestBuffer();
   GameState state = Editing;
   double last_update = 0;
@@ -31,6 +29,9 @@ int main(void) {
     
     // Check for mouse down on a cell
 
+    if (IsKeyDown(KEY_G))
+      RenderMenu(main_menu);
+    
     if (state == Editing)
       PaintCell((bool*)buffer);
     else if (state == Running && time - last_update >= 0.2) {
