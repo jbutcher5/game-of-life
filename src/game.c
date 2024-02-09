@@ -56,16 +56,12 @@ typedef enum {
 bool UpdateCell(int adjcells, bool current_state) {
   // Create two static caches
  
-  static CellState cell_enabled_cache[256];
-  static CellState cell_disabled_cache[256];
+  static CellState cache_buf[256*2];
 
-  // Select the correct cache for the cells state
+  // Adjust the cache pointer to the correct section of the buffer 
   
-  CellState *cache = (CellState*)cell_enabled_cache;
+  CellState *cache = (CellState*)cache_buf + 256 * !current_state;
   
-  if (!current_state)
-    cache = cell_disabled_cache;
-
   // Retrieve cached cell state
   
   CellState new_state = cache[adjcells];
