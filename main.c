@@ -4,7 +4,15 @@
 #include <raylib.h>
 #include <omp.h>
 
+#include <stdio.h>
+
 #define MAX_THREADS 4
+
+#pragma clang diagnostic ignored "-Wunused-parameter"
+
+void test_func(Context _) {
+  puts("Hello!");
+}
 
 int main(void) {
   omp_set_num_teams(MAX_THREADS);
@@ -14,15 +22,21 @@ int main(void) {
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Conway's Game of Life");
   SetTargetFPS(60);
 
-
   // Main Menu
 
-  Component menu_components[] = {{(Vector2){10, 10}, (Vector2){100, 40}, (void*)"Test", Label}};
-  Menu main_menu = {menu_components, 1, (Vector2){0, 0}, (Vector2){100, 40}};
+  ButtonContent test_button = {test_func, "Click Me!"};
+  
+  Component menu_components[] = {
+    {(Vector2){5, 30}, (Vector2){50, 40}, (void*)"Test:", Label},
+    {(Vector2){50, 5}, (Vector2){50, 40}, &test_button, Button}
+  };
+  Menu main_menu = {menu_components, 2, (Vector2){50, 50}, (Vector2){200, 80}};
 
   bool *buffer = RequestBuffer();
   GameState state = Editing;
   double last_update = 0;
+
+  Context ctx = {buffer, &state};
   
   while (!WindowShouldClose()) {
     double time = GetTime();
@@ -30,7 +44,7 @@ int main(void) {
     // Check for mouse down on a cell
 
     if (IsKeyDown(KEY_G))
-      RenderMenu(main_menu);
+      UpdateMenu(&main_menu, ctx);
     
     if (state == Editing)
       PaintCell((bool*)buffer);
@@ -49,6 +63,8 @@ int main(void) {
     BeginDrawing();
     ClearBackground(BLACK);
     RenderBuffer((bool*)buffer);
+    if (IsKeyDown(KEY_G))
+      RenderMenu(main_menu);
     EndDrawing();
   }
 

@@ -1,6 +1,7 @@
 #include "menu.h"
 #include <raylib.h>
 #include <raymath.h>
+#include <stdio.h>
 
 void DrawMenuBox(Vector2 position, Vector2 size) {
   DrawRectangle(position.x, position.y, size.x, size.y, BLACK);
@@ -26,19 +27,16 @@ Vector2 MeasureTextV2(const char *text, int fontSize)
 
 void RenderComponent(Menu *menu, Component component) {
   Vector2 screen_pos = Vector2Add(menu->position, component.position);
-  Vector2 text_pos;
-  switch (component.type) {
-  case Label:
-    text_pos = Vector2Add(screen_pos, Vector2Scale(component.size, 0.5));
+  if (component.type == Button) {
+    ButtonContent *content = component.content;
+    Vector2 text_pos = Vector2Add(screen_pos, Vector2Scale(component.size, 0.5));
     text_pos = Vector2Subtract(text_pos,
-			       Vector2Scale(MeasureTextV2(component.content, 10), 0.5));
+			       Vector2Scale(MeasureTextV2(content->label, 10), 0.5));
     DrawMenuBox(screen_pos, component.size);
-    DrawText(component.content, text_pos.x, text_pos.y, 10, RAYWHITE);
-    break;
-  case Button:
-
-    break;
-  };
+    DrawText(content->label, text_pos.x, text_pos.y, 10, RAYWHITE);
+  } else if (component.type == Label) {
+    DrawText(component.content, screen_pos.x, screen_pos.y, 10, RAYWHITE);
+  }
 }
 
 void RenderMenu(Menu menu) {
@@ -46,4 +44,23 @@ void RenderMenu(Menu menu) {
 
   for (int i = 0; i < menu.component_count; i++)
     RenderComponent(&menu, menu.components[i]);
+}
+
+void UpdateMenu(Menu *menu, Context ctx) {
+  for (int i = 0; i < menu->component_count; i++) {
+    Component *component = menu->components + i;
+    if (component->type == Button) {
+      ButtonContent *content = component->content;
+      Vector2 screen_pos = Vector2Add(component->position, menu->position);
+      
+      Vector2 mouse_pos = GetMousePosition();
+      bool is_colliding = mouse_pos.x >= screen_pos.x &&
+	mouse_pos.x <= screen_pos.x + component->size.x &&
+	mouse_pos.y >= screen_pos.y &&
+	mouse_pos.y <= screen_pos.y + component->size.y;
+	
+      if (is_colliding && IsMouseButtonPressed(0))
+	content->func(ctx);
+    }
+  }
 }

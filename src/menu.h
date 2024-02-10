@@ -6,7 +6,6 @@
 typedef struct {
   bool *buffer;
   GameState *state;
-  double *last_update;
 } Context;
 
 typedef enum {
@@ -19,7 +18,7 @@ typedef char* LabelContent;
 typedef struct {
   void (*func) (Context);
   char *label;
-}  ButtonContent;
+} ButtonContent;
 
 typedef struct {
   Vector2 position;
@@ -36,4 +35,4 @@ typedef struct {
 } Menu;
 
 void RenderMenu(Menu menu);
-void UpdateMenu(Menu *menu);
+void UpdateMenu(Menu *menu, Context ctx);
