@@ -1,7 +1,6 @@
 #include "menu.h"
 #include <raylib.h>
 #include <raymath.h>
-#include <stdio.h>
 
 void DrawMenuBox(Vector2 position, Vector2 size) {
   DrawRectangle(position.x, position.y, size.x, size.y, BLACK);
