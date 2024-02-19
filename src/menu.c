@@ -25,15 +25,23 @@ Vector2 MeasureTextV2(const char *text, int fontSize)
 }
 
 void RenderComponent(Menu *menu, Component component) {
+  // Calculate screen position of component
   Vector2 screen_pos = Vector2Add(menu->position, component.position);
+
+  // Change rendering method depending on the type of component
   if (component.type == Button) {
     ButtonContent *content = component.content;
+
+    // Align text to the centre of the button
     Vector2 text_pos = Vector2Add(screen_pos, Vector2Scale(component.size, 0.5));
     text_pos = Vector2Subtract(text_pos,
 			       Vector2Scale(MeasureTextV2(content->label, 10), 0.5));
+
+    // Draw box and text
     DrawMenuBox(screen_pos, component.size);
     DrawText(content->label, text_pos.x, text_pos.y, 10, RAYWHITE);
   } else if (component.type == Label) {
+    // Draw text (not centred)
     DrawText(component.content, screen_pos.x, screen_pos.y, 10, RAYWHITE);
   }
 }
@@ -41,6 +49,7 @@ void RenderComponent(Menu *menu, Component component) {
 void RenderMenu(Menu menu) {
   DrawMenuBox(menu.position, menu.size);
 
+  // Iterate through each menu component
   for (int i = 0; i < menu.component_count; i++)
     RenderComponent(&menu, menu.components[i]);
 }

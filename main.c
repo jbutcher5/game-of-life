@@ -1,18 +1,13 @@
 #include "src/field.h"
 #include "src/game.h"
 #include "src/menu.h"
+#include "src/button_funcs.h"
+
 #include <raylib.h>
 #include <omp.h>
 
-#include <stdio.h>
-
 #define MAX_THREADS 4
 
-#pragma clang diagnostic ignored "-Wunused-parameter"
-
-void test_func(Context _) {
-  puts("Hello!");
-}
 
 int main(void) {
   omp_set_num_teams(MAX_THREADS);
@@ -21,34 +16,38 @@ int main(void) {
   
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Conway's Game of Life");
   SetTargetFPS(60);
+  SetExitKey(-1);
 
   // Main Menu
 
-  ButtonContent test_button = {test_func, "Click Me!"};
+  ButtonContent reset_button = {reset, "Reset"};
+  ButtonContent fullscreen_button = {toggle_window_size, "Fullscreen"};
   
   Component menu_components[] = {
-    {(Vector2){5, 30}, (Vector2){50, 40}, (void*)"Test:", Label},
-    {(Vector2){50, 5}, (Vector2){50, 40}, &test_button, Button}
+    {(Vector2){10, 20}, (Vector2){50, 40}, (void*)"Reset Field:", Label},
+    {(Vector2){100, 5}, (Vector2){60, 40}, &reset_button, Button},
+    {(Vector2){100, 55}, (Vector2){60, 40}, &fullscreen_button, Button}
   };
-  Menu main_menu = {menu_components, 2, (Vector2){50, 50}, (Vector2){200, 80}};
+  Menu main_menu = {menu_components, 3, (Vector2){50, 50}, (Vector2){300, 300}};
+  bool main_menu_open = false;
 
   bool *buffer = RequestBuffer();
   GameState state = Editing;
   double last_update = 0;
 
-  Context ctx = {buffer, &state};
+  Context ctx = {&buffer, &state};
   
   while (!WindowShouldClose()) {
     double time = GetTime();
     
     // Check for mouse down on a cell
 
-    if (IsKeyDown(KEY_G))
-      UpdateMenu(&main_menu, ctx);
+    if (IsKeyPressed(KEY_ESCAPE))
+      main_menu_open = !main_menu_open;
     
-    if (state == Editing)
+    if (state == Editing && !main_menu_open)
       PaintCell((bool*)buffer);
-    else if (state == Running && time - last_update >= 0.2) {
+    else if (state == Running && time - last_update >= 0.2 && !main_menu_open) {
       buffer = UpdateCells(buffer);
       last_update = time;
     }
@@ -63,9 +62,11 @@ int main(void) {
     BeginDrawing();
     ClearBackground(BLACK);
     RenderBuffer((bool*)buffer);
-    if (IsKeyDown(KEY_G))
+    if (main_menu_open) {
+      UpdateMenu(&main_menu, ctx);
       RenderMenu(main_menu);
-    EndDrawing();
+    }
+     EndDrawing();
   }
 
   CloseWindow();
