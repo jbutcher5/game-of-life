@@ -22,14 +22,16 @@ int main(void) {
 
   ButtonContent reset_button = {reset, "Reset"};
   ButtonContent fullscreen_button = {toggle_window_size, "Fullscreen"};
+  ButtonContent export_button = {serialise_field, "Export"};
   
   Component menu_components[] = {
     {(Vector2){10, 20}, (Vector2){50, 40}, (void*)"Reset Field:", Label},
     {(Vector2){100, 5}, (Vector2){60, 40}, &reset_button, Button},
     {(Vector2){10, 70}, (Vector2){50, 40}, (void*)"Toggle Fullscreen:", Label},
-    {(Vector2){120, 55}, (Vector2){60, 40}, &fullscreen_button, Button}
+    {(Vector2){120, 55}, (Vector2){60, 40}, &fullscreen_button, Button},
+    {(Vector2){120, 105}, (Vector2){60, 40}, &export_button, Button}
   };
-  Menu main_menu = {menu_components, 4, (Vector2){50, 50}, (Vector2){300, 300}};
+  Menu main_menu = {menu_components, 5, (Vector2){50, 50}, (Vector2){300, 300}};
   bool main_menu_open = false;
 
   bool *buffer = RequestBuffer();
