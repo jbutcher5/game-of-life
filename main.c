@@ -26,9 +26,10 @@ int main(void) {
   Component menu_components[] = {
     {(Vector2){10, 20}, (Vector2){50, 40}, (void*)"Reset Field:", Label},
     {(Vector2){100, 5}, (Vector2){60, 40}, &reset_button, Button},
-    {(Vector2){100, 55}, (Vector2){60, 40}, &fullscreen_button, Button}
+    {(Vector2){10, 70}, (Vector2){50, 40}, (void*)"Toggle Fullscreen:", Label},
+    {(Vector2){120, 55}, (Vector2){60, 40}, &fullscreen_button, Button}
   };
-  Menu main_menu = {menu_components, 3, (Vector2){50, 50}, (Vector2){300, 300}};
+  Menu main_menu = {menu_components, 4, (Vector2){50, 50}, (Vector2){300, 300}};
   bool main_menu_open = false;
 
   bool *buffer = RequestBuffer();
