@@ -2,6 +2,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include <stdio.h>
+
 void DrawMenuBox(Vector2 position, Vector2 size) {
   DrawRectangle(position.x, position.y, size.x, size.y, BLACK);
   DrawRectangleLines(position.x, position.y, size.x, size.y, RAYWHITE);
@@ -43,6 +45,16 @@ void RenderComponent(Menu *menu, Component component) {
   } else if (component.type == Label) {
     // Draw text (not centred)
     DrawText(component.content, screen_pos.x, screen_pos.y, 10, RAYWHITE);
+  } else if (component.type == Input) {
+    InputContent *content = component.content;
+    
+    // Align text to the left horizontally and centre vertiacally
+    Vector2 text_pos = screen_pos;
+    text_pos.y += component.size.y * 0.5;
+    text_pos.y -= MeasureTextV2(content->buffer, 10).y * 0.5;
+
+    DrawMenuBox(screen_pos, component.size);
+    DrawText(content->buffer, text_pos.x, text_pos.y, 10, RAYWHITE);
   }
 }
 
@@ -69,6 +81,30 @@ void UpdateMenu(Menu *menu, Context ctx) {
 	
       if (is_colliding && IsMouseButtonPressed(0))
 	content->func(ctx);
+    } else if (component->type == Input) {
+      InputContent *content = component->content;
+      Vector2 screen_pos = Vector2Add(component->position, menu->position);
+      
+      Vector2 mouse_pos = GetMousePosition();
+      bool is_colliding = mouse_pos.x >= screen_pos.x &&
+	mouse_pos.x <= screen_pos.x + component->size.x &&
+	mouse_pos.y >= screen_pos.y &&
+	mouse_pos.y <= screen_pos.y + component->size.y;
+
+      if (IsMouseButtonPressed(0))
+	content->focused = is_colliding;
+
+      if (content->focused) {
+	int c = GetCharPressed();
+	if (IsKeyPressed(KEY_BACKSPACE) && content->buf_len > 0) {
+	  content->buf_len--;
+	  content->buffer[content->buf_len] = 0;
+	}
+	else if (c && content->buf_len + 1 != content->buf_max) {
+	  content->buffer[content->buf_len] = (char)c;
+	  content->buf_len++;
+	}
+      }
     }
   }
 }

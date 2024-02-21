@@ -10,7 +10,8 @@ typedef struct {
 
 typedef enum {
   Label,
-  Button
+  Button,
+  Input
 } ComponentType;
 
 typedef char* LabelContent;
@@ -19,6 +20,13 @@ typedef struct {
   void (*func) (Context);
   char *label;
 } ButtonContent;
+
+typedef struct {
+  char *buffer;
+  int buf_len;
+  int buf_max;
+  bool focused;
+} InputContent;
 
 typedef struct {
   Vector2 position;
