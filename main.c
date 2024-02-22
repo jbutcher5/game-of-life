@@ -19,7 +19,7 @@ int main(void) {
 
   // Main Menu
 
-  Menu main_menu = {menu_components, 6, (Vector2){50, 50}, (Vector2){300, 300}};
+  Menu main_menu = {menu_components, 10, (Vector2){50, 50}, (Vector2){400, 300}};
   bool main_menu_open = false;
 
   bool *buffer = RequestBuffer();
@@ -32,9 +32,6 @@ int main(void) {
     double time = GetTime();
 
     // Check for mouse down on a cell
-
-    if (IsKeyPressed(KEY_G))
-      deserialise_field(ctx);
 
     if (IsKeyPressed(KEY_ESCAPE))
       main_menu_open = !main_menu_open;

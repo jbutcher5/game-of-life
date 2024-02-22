@@ -8,21 +8,27 @@
 
 #pragma clang diagnostic ignored "-Wunused-parameter"
 
-char file_path[16] = {0};
+char import_file_path[32], export_file_path[32] = {0};
 
 ButtonContent reset_button = {reset, "Reset"};
 ButtonContent fullscreen_button = {toggle_window_size, "Fullscreen"};
+ButtonContent import_button = {deserialise_field, "Import"};
 ButtonContent export_button = {serialise_field, "Export"};
 
-InputContent import_input = {file_path, 0, 16, false};
+InputContent import_input = {import_file_path, 0, 32, false};
+InputContent export_input = {export_file_path, 0, 32, false};
 
 Component menu_components[] = {
   {(Vector2){10, 20}, (Vector2){50, 40}, (void*)"Reset Field:", Label},
   {(Vector2){100, 5}, (Vector2){60, 40}, &reset_button, Button},
   {(Vector2){10, 70}, (Vector2){50, 40}, (void*)"Toggle Fullscreen:", Label},
   {(Vector2){120, 55}, (Vector2){60, 40}, &fullscreen_button, Button},
-  {(Vector2){120, 105}, (Vector2){60, 40}, &export_button, Button},
-  {(Vector2){120, 155}, (Vector2){60, 40}, &import_input, Input},
+  {(Vector2){10, 120}, (Vector2){50, 40}, (void*)"Export Field:", Label},
+  {(Vector2){100, 105}, (Vector2){60, 40}, &export_button, Button},
+  {(Vector2){180, 105}, (Vector2){120, 40}, &export_input, Input},
+  {(Vector2){10, 170}, (Vector2){50, 40}, (void*)"Import Field:", Label},
+  {(Vector2){100, 155}, (Vector2){60, 40}, &import_button, Button},
+  {(Vector2){180, 155}, (Vector2){120, 40}, &import_input, Input},
 };
 
 void reset(Context ctx) {
@@ -43,11 +49,16 @@ void toggle_window_size(Context _) {
 }
 
 void serialise_field(Context ctx) {
-  FILE *file = fopen("tmp.txt", "w");
-  freopen("tmp.txt", "a", file);
+  FILE *file = fopen(export_file_path, "w");
+  freopen(export_file_path, "a", file);
 
-  if (!file)
+  if (!file) {
+    for (int i = 0; i < 16; i++)
+      export_file_path[i] = 0;
+
+    export_input.buf_len = 0;
     return;
+  }
 
   char buf_size[128];
 
@@ -61,14 +72,13 @@ void serialise_field(Context ctx) {
 }
 
 void deserialise_field(Context ctx) {
-  FILE *file = fopen(file_path, "r");
+  FILE *file = fopen(import_file_path, "r");
 
   if (!file) {
     for (int i = 0; i < 16; i++)
-      file_path[i] = 0;
+      import_file_path[i] = 0;
 
     import_input.buf_len = 0;
-
     return;
   }
   

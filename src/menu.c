@@ -47,14 +47,22 @@ void RenderComponent(Menu *menu, Component component) {
     DrawText(component.content, screen_pos.x, screen_pos.y, 10, RAYWHITE);
   } else if (component.type == Input) {
     InputContent *content = component.content;
-    
-    // Align text to the left horizontally and centre vertiacally
-    Vector2 text_pos = screen_pos;
-    text_pos.y += component.size.y * 0.5;
-    text_pos.y -= MeasureTextV2(content->buffer, 10).y * 0.5;
 
+    char *text = "Type Here";
+    Color colour = DARKGRAY;
+    
+    if (content->buf_len > 0) {
+      text = content->buffer;
+      colour = RAYWHITE;
+    }
+
+    // Align text to the centre of the button
+    Vector2 text_pos = Vector2Add(screen_pos, Vector2Scale(component.size, 0.5));
+    text_pos = Vector2Subtract(text_pos,
+			       Vector2Scale(MeasureTextV2(text, 10), 0.5));
+    
     DrawMenuBox(screen_pos, component.size);
-    DrawText(content->buffer, text_pos.x, text_pos.y, 10, RAYWHITE);
+    DrawText(text, text_pos.x, text_pos.y, 10, colour);
   }
 }
 
