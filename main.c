@@ -8,7 +8,6 @@
 
 #define MAX_THREADS 4
 
-
 int main(void) {
   omp_set_num_teams(MAX_THREADS);
 
@@ -20,21 +19,6 @@ int main(void) {
 
   // Main Menu
 
-  char import_buffer[16] = {0};
-  
-  ButtonContent reset_button = {reset, "Reset"};
-  ButtonContent fullscreen_button = {toggle_window_size, "Fullscreen"};
-  ButtonContent export_button = {serialise_field, "Export"};
-  InputContent import_input = {import_buffer, 0, 16, false};
-  
-  Component menu_components[] = {
-    {(Vector2){10, 20}, (Vector2){50, 40}, (void*)"Reset Field:", Label},
-    {(Vector2){100, 5}, (Vector2){60, 40}, &reset_button, Button},
-    {(Vector2){10, 70}, (Vector2){50, 40}, (void*)"Toggle Fullscreen:", Label},
-    {(Vector2){120, 55}, (Vector2){60, 40}, &fullscreen_button, Button},
-    {(Vector2){120, 105}, (Vector2){60, 40}, &export_button, Button},
-    {(Vector2){120, 155}, (Vector2){60, 40}, &import_input, Input},
-  };
   Menu main_menu = {menu_components, 6, (Vector2){50, 50}, (Vector2){300, 300}};
   bool main_menu_open = false;
 
@@ -46,8 +30,11 @@ int main(void) {
   
   while (!WindowShouldClose()) {
     double time = GetTime();
-    
+
     // Check for mouse down on a cell
+
+    if (IsKeyPressed(KEY_G))
+      deserialise_field(ctx);
 
     if (IsKeyPressed(KEY_ESCAPE))
       main_menu_open = !main_menu_open;
