@@ -1,7 +1,7 @@
 #include "src/field.h"
 #include "src/game.h"
 #include "src/menu.h"
-#include "src/button_funcs.h"
+#include "src/menu_config.h"
 
 #include <raylib.h>
 #include <omp.h>

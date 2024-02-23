@@ -1,4 +1,4 @@
-#include "button_funcs.h"
+#include "menu_config.h"
 #include "field.h"
 #include "game.h"
 #include "menu.h"
