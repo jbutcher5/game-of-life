@@ -28,7 +28,7 @@ int main(void) {
   GameState state = Editing;
   double last_update = 0;
 
-  Context ctx = {&buffer, &state};
+  Context ctx = {buffer, &state};
   
   while (!WindowShouldClose()) {
     double time = GetTime();

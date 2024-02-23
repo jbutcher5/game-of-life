@@ -4,7 +4,7 @@
 #include <raylib.h>
 
 typedef struct {
-  bool **buffer;
+  bool *buffer;
   GameState *state;
 } Context;
 

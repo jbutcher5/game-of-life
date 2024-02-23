@@ -2,9 +2,9 @@
 #include "field.h"
 #include "game.h"
 #include "menu.h"
-#include "stdio.h"
-#include "stdlib.h"
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <raylib.h>
 
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -56,7 +56,7 @@ void play_pause(Context ctx) {
 void reset(Context ctx) {
   *ctx.state = Editing;
   for (int i = 0; i < BUFF_SIZE; i++)
-    (*ctx.buffer)[i] = 0;
+    ctx.buffer[i] = false;
 }
 
 void toggle_window_size(Context _) {
@@ -85,7 +85,7 @@ void serialise_field(Context ctx) {
   char buf_size[128];
 
   for (int i = 0; i < BUFF_SIZE; i++)
-    if ((*ctx.buffer)[i]) {
+    if (ctx.buffer[i]) {
       snprintf(buf_size, 128, "%d\n", i);
       fputs(buf_size, file);
     }
@@ -112,7 +112,7 @@ void deserialise_field(Context ctx) {
   for (int c = fgetc(file); c != EOF; c = fgetc(file)) {
     if (c == '\n') {
       // TODO: Check I'm not accessing bad memory
-      (*ctx.buffer)[atoi(buffer)] = true;
+      ctx.buffer[atoi(buffer)] = true;
       buffer_len = 0;
 
       for (int i = 0; i < 32; i++)
