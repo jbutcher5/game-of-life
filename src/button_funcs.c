@@ -1,6 +1,7 @@
 #include "button_funcs.h"
 #include "field.h"
 #include "game.h"
+#include "menu.h"
 #include "stdio.h"
 #include "stdlib.h"
 
@@ -30,6 +31,27 @@ Component menu_components[] = {
   {(Vector2){100, 155}, (Vector2){60, 40}, &import_button, Button},
   {(Vector2){180, 155}, (Vector2){120, 40}, &import_input, Input},
 };
+
+ButtonContent play_button = {play_pause, (char[]){'>', 0, 0, 0}};
+
+Component control_bar_components[] = {
+  {(Vector2){20, 5}, (Vector2){20, 20}, &play_button, Button},
+};
+
+void play_pause(Context ctx) {
+  if (*ctx.state == Editing || *ctx.state == Paused) {
+    *ctx.state = Running;
+    play_button.label[0] = '|';
+    play_button.label[1] = ' ';
+    play_button.label[2] = '|';
+    return;
+  }
+
+  play_button.label[0] = '>';
+  play_button.label[1] = 0;
+  play_button.label[2] = 0;
+  *ctx.state = Paused;
+}
 
 void reset(Context ctx) {
   *ctx.state = Editing;

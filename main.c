@@ -22,6 +22,8 @@ int main(void) {
   Menu main_menu = {menu_components, 10, (Vector2){50, 50}, (Vector2){400, 300}};
   bool main_menu_open = false;
 
+  Menu control_bar = {control_bar_components, 1, (Vector2){80, 0}, (Vector2){100, 30}};
+  
   bool *buffer = RequestBuffer();
   GameState state = Editing;
   double last_update = 0;
@@ -43,21 +45,27 @@ int main(void) {
       last_update = time;
     }
 
+    /*
     if (IsKeyPressed(KEY_P) && state != Running)
       state = Running;
     else if (IsKeyPressed(KEY_P))
       state = Paused;
-    
+    */
     // Render game
     
     BeginDrawing();
     ClearBackground(BLACK);
     RenderBuffer((bool*)buffer);
+    RenderMenu(control_bar);
+
     if (main_menu_open) {
       UpdateMenu(&main_menu, ctx);
       RenderMenu(main_menu);
+    } else {
+      UpdateMenu(&control_bar, ctx);
     }
-     EndDrawing();
+    
+    EndDrawing();
   }
 
   CloseWindow();
