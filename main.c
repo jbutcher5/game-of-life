@@ -23,7 +23,7 @@ int main(void) {
   Menu main_menu = {menu_components, 10, (Vector2){50, 50}, (Vector2){400, 300}};
   bool main_menu_open = false;
 
-  Menu control_bar = {control_bar_components, 4, (Vector2){80, 0}, (Vector2){100, 30}};
+  Menu control_bar = {control_bar_components, 4, (Vector2){5, 5}, (Vector2){195, 30}};
 
   bool *buffer = RequestBuffer();
   GameState state = Editing;
@@ -35,7 +35,7 @@ int main(void) {
   
   while (!WindowShouldClose()) {
     double time = GetTime();
-    snprintf(update_buffer_insert, 8, "%f", update_delta);
+    snprintf(update_buffer_insert, 4, "%f", update_delta);
 
     // Check for mouse down on a cell
 

@@ -44,7 +44,7 @@ Component control_bar_components[] = {
   {(Vector2){5, 5}, (Vector2){20, 20}, &play_button, Button},
   {(Vector2){30, 5}, (Vector2){20, 20}, &speedup_button, Button},
   {(Vector2){55, 5}, (Vector2){20, 20}, &slowdown_button, Button},
-  {(Vector2){90, 5}, (Vector2){20, 20}, update_buffer, Label},
+  {(Vector2){80, 10}, (Vector2){20, 20}, update_buffer, Label},
 };
 
 void slowdown(Context ctx) {
@@ -52,7 +52,7 @@ void slowdown(Context ctx) {
 }
 
 void speedup(Context ctx) {
-  *ctx.update_delta += 0.1;
+  *ctx.update_delta += 0.1 * (*ctx.update_delta + 0.1 < 10);
 }
 
 void play_pause(Context ctx) {
