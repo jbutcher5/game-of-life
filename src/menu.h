@@ -6,6 +6,7 @@
 typedef struct {
   bool *buffer;
   GameState *state;
+  double *update_delta;
 } Context;
 
 typedef enum {

@@ -3,6 +3,7 @@
 #include "src/menu.h"
 #include "src/menu_config.h"
 
+#include <stdio.h>
 #include <raylib.h>
 #include <omp.h>
 
@@ -22,16 +23,19 @@ int main(void) {
   Menu main_menu = {menu_components, 10, (Vector2){50, 50}, (Vector2){400, 300}};
   bool main_menu_open = false;
 
-  Menu control_bar = {control_bar_components, 1, (Vector2){80, 0}, (Vector2){100, 30}};
-  
+  Menu control_bar = {control_bar_components, 4, (Vector2){80, 0}, (Vector2){100, 30}};
+
   bool *buffer = RequestBuffer();
   GameState state = Editing;
+
+  double update_delta = 0.2;
   double last_update = 0;
 
-  Context ctx = {buffer, &state};
+  Context ctx = {buffer, &state, &update_delta};
   
   while (!WindowShouldClose()) {
     double time = GetTime();
+    snprintf(update_buffer_insert, 8, "%f", update_delta);
 
     // Check for mouse down on a cell
 
@@ -40,17 +44,11 @@ int main(void) {
     
     if (state == Editing && !main_menu_open)
       PaintCell((bool*)buffer);
-    else if (state == Running && time - last_update >= 0.2 && !main_menu_open) {
+    else if (state == Running && time - last_update >= update_delta && !main_menu_open) {
       buffer = UpdateCells(buffer);
       last_update = time;
     }
 
-    /*
-    if (IsKeyPressed(KEY_P) && state != Running)
-      state = Running;
-    else if (IsKeyPressed(KEY_P))
-      state = Paused;
-    */
     // Render game
     
     BeginDrawing();

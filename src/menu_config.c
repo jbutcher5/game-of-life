@@ -33,10 +33,27 @@ Component menu_components[] = {
 };
 
 ButtonContent play_button = {play_pause, (char[]){'>', 0, 0, 0}};
+ButtonContent speedup_button = {speedup, ">>"};
+ButtonContent slowdown_button = {slowdown, "<<"};
+
+char update_buffer[32] = "Update (Seconds): ";
+
+char *update_buffer_insert = update_buffer + sizeof(char) * 18;
 
 Component control_bar_components[] = {
-  {(Vector2){20, 5}, (Vector2){20, 20}, &play_button, Button},
+  {(Vector2){5, 5}, (Vector2){20, 20}, &play_button, Button},
+  {(Vector2){30, 5}, (Vector2){20, 20}, &speedup_button, Button},
+  {(Vector2){55, 5}, (Vector2){20, 20}, &slowdown_button, Button},
+  {(Vector2){90, 5}, (Vector2){20, 20}, update_buffer, Label},
 };
+
+void slowdown(Context ctx) {
+  *ctx.update_delta -= 0.1 * (*ctx.update_delta - 0.1 > 0);
+}
+
+void speedup(Context ctx) {
+  *ctx.update_delta += 0.1;
+}
 
 void play_pause(Context ctx) {
   if (*ctx.state == Editing || *ctx.state == Paused) {

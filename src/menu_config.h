@@ -13,6 +13,9 @@ extern InputContent export_input, import_input;
 extern Component menu_components[];
 
 void play_pause(Context);
+void speedup(Context);
+void slowdown(Context);
 
 extern ButtonContent play_button;
 extern Component control_bar_components[];
+extern char *update_buffer_insert;
