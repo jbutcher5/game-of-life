@@ -2,8 +2,6 @@
 #include <raylib.h>
 #include <raymath.h>
 
-#include <stdio.h>
-
 void DrawMenuBox(Vector2 position, Vector2 size) {
   DrawRectangle(position.x, position.y, size.x, size.y, BLACK);
   DrawRectangleLines(position.x, position.y, size.x, size.y, RAYWHITE);
@@ -81,6 +79,7 @@ void UpdateMenu(Menu *menu, Context ctx) {
       ButtonContent *content = component->content;
       Vector2 screen_pos = Vector2Add(component->position, menu->position);
       
+      // Check if mouse is over AABB
       Vector2 mouse_pos = GetMousePosition();
       bool is_colliding = mouse_pos.x >= screen_pos.x &&
 	mouse_pos.x <= screen_pos.x + component->size.x &&
@@ -92,18 +91,23 @@ void UpdateMenu(Menu *menu, Context ctx) {
     } else if (component->type == Input) {
       InputContent *content = component->content;
       Vector2 screen_pos = Vector2Add(component->position, menu->position);
-      
+
+      // Check if mouse is over AABB
       Vector2 mouse_pos = GetMousePosition();
       bool is_colliding = mouse_pos.x >= screen_pos.x &&
 	mouse_pos.x <= screen_pos.x + component->size.x &&
 	mouse_pos.y >= screen_pos.y &&
 	mouse_pos.y <= screen_pos.y + component->size.y;
 
+      // Check if input should be focused
       if (IsMouseButtonPressed(0))
 	content->focused = is_colliding;
 
+      // Check if input is focused and characters are being typed
       if (content->focused) {
 	int c = GetCharPressed();
+
+	// If a backspace is typed
 	if (IsKeyPressed(KEY_BACKSPACE) && content->buf_len > 0) {
 	  content->buf_len--;
 	  content->buffer[content->buf_len] = 0;
